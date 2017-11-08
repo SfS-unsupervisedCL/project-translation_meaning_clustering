@@ -14,9 +14,11 @@ systems/models.
 A short list of literature (articles/books/blog posts/...). We will
 pick some of the listed papers for further class discussion.
 
+Mohit Bansal, John DeNero, Dekang Lin [_Unsupervised Translation Sense Clustering_](https://www.cs.unc.edu/~mbansal/papers/naacl12_translationSenseClustering.pdf)
+
 ## Available data, tools, resources
 
 ## Project members
 
-- Name (GitHubID)
+- Johannes (Joapfel)
 - Name (GitHubID) 
