@@ -15,6 +15,11 @@ A short list of literature (articles/books/blog posts/...). We will
 pick some of the listed papers for further class discussion.
 
 Mohit Bansal, John DeNero, Dekang Lin [_Unsupervised Translation Sense Clustering_](https://www.cs.unc.edu/~mbansal/papers/naacl12_translationSenseClustering.pdf)
+</br>
+Michael Denkowski, [ A Survey of Techniques for Unsupervised Word
+Sense Induction ](https://www.cs.cmu.edu/~mdenkows/pdf/wsi2009.pdf) (Chapter 5 is translation related)
+
+
 
 ## Available data, tools, resources
 
