@@ -1,6 +1,7 @@
 # Project title
 
-A brief (one paragraph) description of the general idea.
+This project is about unsupervised sense clustering of translations. It is a subfield of machine translation and 
+used there in order to improve or evaluate word translations.
 
 ## Motivation, method, hypotheses
 
