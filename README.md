@@ -18,6 +18,10 @@ Mohit Bansal, John DeNero, Dekang Lin [_Unsupervised Translation Sense Clusterin
 </br>
 Michael Denkowski, [ A Survey of Techniques for Unsupervised Word
 Sense Induction ](https://www.cs.cmu.edu/~mdenkows/pdf/wsi2009.pdf) (Chapter 5 is translation related)
+</br>
+Marianna Apidianaki, Yifan He [ Marianna Apidianaki, Yifan He. An algorithm for cross-lingual sense-clustering tested in a MT evaluation
+setting. International Workshop on Spoken Language Translation (IWSLT-2010), Dec 2010,
+Paris, France. pp.219–226, 2010 ](https://hal.inria.fr/hal-00544745/document)
 
 
 
