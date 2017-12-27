@@ -32,6 +32,10 @@ Paris, France. pp.219–226, 2010 ](https://hal.inria.fr/hal-00544745/document)
 
 
 ## Available data, tools, resources
+Data for dictionaries: [ Bilingual Dictionaries for Offline Use ](https://en.wiktionary.org/wiki/User%3aMatthias_Buchmeier)
+(as an alternative to the handcrafted dictionaries described in the 
+[_Unsupervised Translation Sense Clustering_](https://www.cs.unc.edu/~mbansal/papers/naacl12_translationSenseClustering.pdf) paper)
+
 
 ## Project members
 
