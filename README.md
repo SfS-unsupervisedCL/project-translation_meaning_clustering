@@ -36,6 +36,12 @@ Data for dictionaries: [ Bilingual Dictionaries for Offline Use ](https://en.wik
 (as an alternative to the handcrafted dictionaries described in the 
 [_Unsupervised Translation Sense Clustering_](https://www.cs.unc.edu/~mbansal/papers/naacl12_translationSenseClustering.pdf) paper)
 
+[dictUtil.py](https://github.com/SfS-unsupervisedCL/project-translation_meaning_clustering/blob/master/dictUtil.py) is for extracting a pure dictionary from the above source which also contains POSTags, Descriptions, Use cases and other meta data.
+<br>
+Example item from en-de dict:
+<br>
+permanent --> {'permanent', 'unbefristet', 'Dauerwelle', 'beständig', 'dauerhaft', 'ständig', 'Permanente'}
+
 
 ## Project members
 
