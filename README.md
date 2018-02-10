@@ -11,9 +11,21 @@ This is not even a problem restricted to machine translation. If we look at L2 l
 </br></br>
 From humans to machines: Knowing that humans make such mistakes quite a lot, one would not expect a statistical (machine translation) model to handle those problems with granularity ad hoc.
 </br></br>
-Method: Clustering (I will update this section as the project grows).
+Method: soft Clustering
+Monolingual features: PMI of a word with its neighbor
+Bilingual features: PMI of a word and its translations
 </br>
 The evaluation will be a combination of manual evaluation and comparison to wordnet sense clusters.
+
+## So far
+
+Monolingual features, normal clustering:
+</br>
+Corpora:</br>
+  COCA, COHA, GloWbe: performed really poorly. Translations like {good, nice} and {issue, problem, ..} are clustered randomly
+  </br>
+  EUROPARL: performed a bit better. Translations like {good, nice} and {issue, problem, ..} are clustered correctly into two clusters. But more complex translations which contain less frequent words are still a problem.
+
 
 ## Relevant literature 
 
