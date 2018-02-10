@@ -42,6 +42,10 @@ Example item from en-de dict:
 <br>
 permanent --> {'permanent', 'unbefristet', 'Dauerwelle', 'beständig', 'dauerhaft', 'ständig', 'Permanente'}
 
+Corpora from:
+http://opus.nlpl.eu/
+
+
 
 ## Project members
 
