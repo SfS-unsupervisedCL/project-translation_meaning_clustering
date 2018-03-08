@@ -23,6 +23,9 @@ class Features(object):
             for t in targetTranslations:
                 self.corpusUtil.findNeighbors(p, t)
 
+    def reverseDict(self, dict):
+        return {v: k for k, v in dict.items()}
+
     def getMonolingualFeatures(self, path, targetTranslations):
         #feed the corpus object with data
         self.feedCorpusUtil(path, targetTranslations)
@@ -49,8 +52,11 @@ class Features(object):
 
             featureMatrix.append(featureVektor)
             self.word2MonolingualFeatureVector[t] = featureVektor
+        return featureMatrix, targetTranslations
 
-        return featureMatrix
+
+    def getBilimgualFeatures(self, path):
+        return 0
 
 
 
@@ -60,9 +66,12 @@ liebe = ['love']
 gesundheitlich = ['hygienic', 'sanitary']
 Gesundheit = ['health', 'soundness', 'strength', 'stability']
 stellen = ['park', 'put', 'set', 'stand']
-
 gut = ['good', 'nice']
 problem = ['issue', 'problem', 'problems']
+colocar = ['collocate', 'invest', 'locate', 'place', 'position', 'put']
+unter = ['below', 'under']
+abhängig = ['dependent', 'addicted']
+reich = ['rich', 'wealthy', 'prolific', 'affluent']
 
 features = Features()
 
@@ -87,10 +96,19 @@ glowbe = ['resources/corpora/GloWbe/w_au_b.txt',
           'resources/corpora/GloWbe/w_ie_g.txt',]
 
 
-monoResult = features.getMonolingualFeatures(glowbe,
-                                             problem + gut)
+europarl_tokenized = [
+    'resources/corpora/Europarl/Europarl.en'
+]
 
-for mr in monoResult:
+openSubs = [
+    'resources/corpora/OpenSubtitles/small/xaa'
+]
+
+
+monoResult = features.getMonolingualFeatures(openSubs,
+                                             verstehen + problem)
+
+for mr in monoResult[0]:
     print(mr)
 
 print('printing features: done')
@@ -103,5 +121,18 @@ for m in mostCommon:
 
 
 print()
-X = np.array(monoResult)
-clusterViaKmeans(X, 2)
+
+comprehend = features.corpusUtil.tokenFrequencies['comprehend']
+print('comprehend', comprehend)
+
+print()
+X = np.array(monoResult[0])
+labels = clusterViaKmeans(X, 2)
+
+print()
+
+for l,m in zip(labels, monoResult[1]):
+    print(l, m)
+
+
+
