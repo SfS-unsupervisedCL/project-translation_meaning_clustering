@@ -12,31 +12,42 @@ def readFile(words, path):
 
             for word in words:
                 if(word in tokens):
+                    #use the whole line as bow
                     rval.append(line.strip())
                     continue
         return rval
 
+#list of bow's, each containing one of the fruits
+fruitsCorpus = readFile(['apple', 'banana', 'oranges', 'watermelons'], 'resources/corpora/OpenSubtitles/small/combined')
 
-fruitsCorpus = readFile(['apple', 'banana', 'oranges', 'watermelons', 'grapefruit', 'mangoes', 'tomatoes', 'pears', 'pineapples',
-    'potato', 'broccoli', 'carrot', 'tomato', 'spinach'], 'resources/corpora/OpenSubtitles/small/xaa')
-workCorpus = readFile(['office', 'home', 'building'], 'resources/corpora/OpenSubtitles/small/xaa')
-corpus = fruitsCorpus + workCorpus
+workCorpus = readFile(['office', 'home', 'building', 'house'], 'resources/corpora/OpenSubtitles/small/combined')
 
-print(len(fruitsCorpus))
-print(len(workCorpus))
+workCorpus = workCorpus[0:3000]
+
+#print(len(fruitsCorpus))
+#print(len(workCorpus))
+
+corpus = np.append(fruitsCorpus, workCorpus)
 
 vectorizer = CountVectorizer()
 X = vectorizer.fit(corpus)
 #print(vectorizer.get_feature_names())
 
-print('------------------------')
 Xfruits = vectorizer.transform(fruitsCorpus).toarray()
-print('------------------------')
 Xwork = vectorizer.transform(workCorpus).toarray()
 
-Xcombined = np.append(Xfruits, Xwork)
+Xcombined = np.vstack((Xfruits, Xwork))
 
-#kmeans = KMeans(n_clusters=2, init='random').fit(Xcombined)
-kmeansMinibatch = MiniBatchKMeans(n_clusters=2, init='random').fit(Xcombined)
+kmeans = KMeans(n_clusters=2, init='random').fit(Xcombined)
+#kmeansMinibatch = MiniBatchKMeans(n_clusters=2, init='random').fit(Xcombined)
 #labels = kmeans.labels_
+np.set_printoptions(threshold=np.nan)
 #print('labels', labels)
+
+f = kmeans.predict(Xfruits)
+print(f)
+
+print('----------------------')
+
+w = kmeans.predict(Xwork)
+print(w)
