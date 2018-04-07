@@ -1,17 +1,26 @@
 from collections import Counter
 import sys
-
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer, HashingVectorizer
 from sklearn.feature_extraction import DictVectorizer
 import sklearn.cluster.k_means_
 from sklearn.cluster.k_means_ import KMeans, MiniBatchKMeans
 from sklearn.cluster import SpectralClustering, DBSCAN
 from sklearn. decomposition import PCA, KernelPCA, SparsePCA, TruncatedSVD, IncrementalPCA
+from sklearn.preprocessing import StandardScaler
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as LDA
 import numpy as np
+from nltk.corpus import stopwords
+
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+import csv
+import pandas as pd
+from pandas.plotting import scatter_matrix
 
 def readFile(words, path):
     with open(path, 'r', encoding='utf8') as f:
         rval = []
+        stop_words = set(stopwords.words('english'))
         for idx in range(len(words)):
             rval.append(Counter())
 
@@ -21,82 +30,86 @@ def readFile(words, path):
 
             for i, word in enumerate(words):
                 if(word in tokens):
+                    tokens = [token.lower() for token in tokens if token.isalpha() and not token in stop_words]
                     counter = rval[i]
                     idx = tokens.index(word)
                     #bow of 5 (2 on the left | 2 on the right)
                     bow = tokens[idx-2:idx+3]
+                    #print(bow)
                     for w in bow:
                         counter[w] += 1
-                    #print(tokens)
-                    #print(tokens[idx-2:idx+3])
-                    #print()
-
-                    #use the whole line as bow
-                    #rval.append(line.strip())
-                    #continue
         return rval
 
-#list of bow's, each containing one of the fruits
-#fruitsCorpus = readFile(['apple', 'banana', 'oranges', 'watermelons'], 'resources/corpora/OpenSubtitles/small/combined2')
-#workCorpus = readFile(['office', 'home', 'building', 'house'], 'resources/corpora/OpenSubtitles/small/combined2')
-corpus = readFile(['apple', 'banana', 'oranges', 'watermelons', 'office', 'home', 'building', 'house'], 'resources/corpora/OpenSubtitles/small/combined2')
-#'office', 'home', 'building', 'house'
+
+corpus = readFile(['apple', 'banana', 'oranges', 'watermelons', 'strawberries', 'grape', 'peach',
+                   'cherry', 'pear', 'plum', 'melon', 'lemon', 'coconut', 'lime',
+                   'office', 'home', 'building', 'house', 'apartment', 'city', 'town', 'village'], 'resources/corpora/OpenSubtitles/small/combined2')
+#'office', 'home', 'building', 'house', 'flat', 'skyscraper', 'apartment', 'commune', 'bureau'
 #'chair', 'table', 'door', 'floor'
 #'apple', 'banana', 'oranges', 'watermelons'
 #'sister', 'brother', 'father', 'mother'
 #'nose', 'eyes', 'mouth', 'face'
 
-#reduce the amount of the work corpus since its causing memory issues otherwise
-#workCorpus = workCorpus[0:8000]
-
-#print(len(fruitsCorpus))
-#print(len(workCorpus))
-#print(fruitsCorpus)
-#print(workCorpus)
-
-#sys.exit()
-
-#corpus = np.append(fruitsCorpus, workCorpus)
-
 vectorizer = DictVectorizer()
-#vectorizer = CountVectorizer()
-#vectorizer = TfidfVectorizer()
-#vectorizer = HashingVectorizer()
 X = vectorizer.fit_transform(corpus).toarray()
-print('X...')
-print(X)
-#print(vectorizer.get_feature_names())
 
-#Xfruits = vectorizer.transform(fruitsCorpus).toarray()
-#Xwork = vectorizer.transform(workCorpus).toarray()
+sc = StandardScaler()
+X_std = sc.fit_transform(X)
 
-#Xcombined = np.vstack((Xfruits, Xwork))
-
-#pca = PCA()
-pca = KernelPCA()
+#pca = PCA(n_components=2)
+pca = KernelPCA(n_components=3, kernel='rbf')
 #pca = SparsePCA()
 #pca = TruncatedSVD()
 #pca = IncrementalPCA()
-X = pca.fit_transform(X)
+X_pca = pca.fit_transform(X_std)
 
 
-kmeans = KMeans(n_clusters=2, init='random').fit(X)
-#f = SpectralClustering(n_clusters=2).fit_predict(X)
-#f = DBSCAN().fit_predict(X)
+kmeans = KMeans(n_clusters=2, init='random').fit(X_pca)
+f = kmeans.predict(X_pca)
 
-#kmeansMinibatch = MiniBatchKMeans(n_clusters=2, init='random').fit(Xcombined)
-#labels = kmeans.labels_
-#np.set_printoptions(threshold=np.nan)
-#print('labels', labels)
-
-f = kmeans.predict(X)
 print(f)
 print('contains number one x times: ', list(f).count(1))
 print('contains number zero x times: ', list(f).count(0))
 
-print('----------------------')
 
-#w = kmeans.predict(Xwork)
-#print(w)
-#print('contains number one x times: ', list(w).count(1))
-#print('contains number zero x times: ', list(w).count(0))
+#plot function from my warmup assignment
+def plot(f):
+    arr = np.array(f)
+    if arr.shape[1] == 2:
+        x1 = arr[:, 0]
+        x2 = arr[:, 1]
+
+        plt.scatter(x1, x2)
+        plt.show()
+
+    elif arr.shape[1] == 3:
+
+        fig = plt.figure()
+        ax = fig.add_subplot(111, projection='3d')
+
+        x = []
+        y = []
+        z = []
+        for line in f:
+            x.append(float(line[0]))
+            y.append(float(line[1]))
+            z.append(float(line[2]))
+
+        ax.scatter(x, y, z, c='r', marker='o')
+
+        ax.set_xlabel('X Label')
+        ax.set_ylabel('Y Label')
+        ax.set_zlabel('Z Label')
+
+        plt.show()
+
+    else:
+        m = np.array(f, dtype=float)
+        # first make some fake data with same layout as yours
+        data = pd.DataFrame(m)
+        # now plot using pandas
+        scatter_matrix(data, alpha=0.2, figsize=(6, 6), diagonal='kde')
+        plt.show()
+
+
+plot(X_pca)
