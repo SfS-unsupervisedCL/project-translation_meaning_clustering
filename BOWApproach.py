@@ -10,6 +10,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as LDA
 import numpy as np
 from nltk.corpus import stopwords
+import xml.etree.ElementTree as ET
 
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
@@ -17,12 +18,48 @@ import csv
 import pandas as pd
 from pandas.plotting import scatter_matrix
 
+
+
+def readAligedCorpus(words, path):
+    rval = [Counter() for i in range(len(words))]
+
+    stop_words = set(stopwords.words('german'))
+
+    tree = ET.parse(path)
+    root = tree.getroot()
+    body = root.find('body')
+    for tu in body.findall('tu'):
+        de = ''
+        en = ''
+        for tuv in tu.findall('tuv'):
+            atr = tuv.attrib
+            lang = atr.get('{http://www.w3.org/XML/1998/namespace}lang')
+
+            if lang == 'de':
+                for seg in tuv.findall('seg'):
+                    de = seg.text.split()
+            if lang == 'en':
+                for seg in tuv.findall('seg'):
+                    en = seg.text.lower()
+                    en_words = en.split()
+                    for i, word in enumerate(words):
+                        if word in en_words:
+                            counter = rval[i]
+                            de = [token.lower() for token in de if token.isalpha() and not token in stop_words]
+                            #whole aligned sentence as BOW
+                            for de_w in de:
+                                counter[de_w] += 1
+    return rval
+
+
+
+
 def readFile(words, path):
     with open(path, 'r', encoding='utf8') as f:
         rval = []
         stop_words = set(stopwords.words('english'))
-        for idx in range(len(words)):
-            rval.append(Counter())
+
+        rval = [Counter() for i in range(len(words))]
 
         lines = f.readlines()
         for line in lines:
@@ -41,31 +78,67 @@ def readFile(words, path):
         return rval
 
 
-corpus = readFile(['apple', 'banana', 'oranges', 'watermelons', 'strawberries', 'grape', 'peach',
-                   'cherry', 'pear', 'plum', 'melon', 'lemon', 'coconut', 'lime',
-                   'office', 'home', 'building', 'house', 'apartment', 'city', 'town', 'village'], 'resources/corpora/OpenSubtitles/small/combined2')
-#'office', 'home', 'building', 'house', 'flat', 'skyscraper', 'apartment', 'commune', 'bureau'
-#'chair', 'table', 'door', 'floor'
-#'apple', 'banana', 'oranges', 'watermelons'
+corpus = readFile(['apple', 'banana', 'oranges', 'watermelons', 'strawberries', 'grape', 'peach', 'cherry', 'pear', 'plum', 'melon', 'lemon', 'coconut', 'lime',
+                    'office', 'home', 'building', 'house', 'apartment', 'city', 'town', 'village'], 'resources/corpora/OpenSubtitles/small/combined2')
+
+
+corpus_biling = readAligedCorpus(['apple', 'banana', 'oranges', 'watermelons', 'strawberries', 'grape', 'peach', 'cherry', 'pear', 'plum', 'melon', 'lemon', 'coconut', 'lime',
+                                  'office', 'home', 'building', 'house', 'apartment', 'city', 'town', 'village'], 'resources/corpora/OpenSubtitles/very_small_parallel/vsmallaa')
+
+#'apple', 'banana', 'oranges', 'watermelons', 'strawberries', 'grape', 'peach', 'cherry', 'pear', 'plum', 'melon', 'lemon', 'coconut', 'lime',
+#'office', 'home', 'building', 'house', 'apartment', 'city', 'town', 'village'
+
+#'shoes', 'shirt', 'pants', 'jacket', 'sweatshirt', 'socks'
+
+#'car', 'plane', 'bicycle', 'motorcycle', 'scooter', 'bus', 'train'
+
+#'new york', 'los angeles', 'chicago', 'houston', 'philadelphia', 'san antonio', 'san diego', 'dallas', 'san jose', 'austin', 'seattle'
+#'wind', 'sun', 'water', 'fire'
+
+#'chair', 'table', 'bed', 'closet', 'commode'
+
 #'sister', 'brother', 'father', 'mother'
-#'nose', 'eyes', 'mouth', 'face'
+
+#'nose', 'eyes', 'mouth', 'face', 'hair'
+
+
 
 vectorizer = DictVectorizer()
 X = vectorizer.fit_transform(corpus).toarray()
 
-sc = StandardScaler()
-X_std = sc.fit_transform(X)
+vectorizer_biling = DictVectorizer()
+X_biling = vectorizer_biling.fit_transform(corpus_biling).toarray()
+
+X_combined = np.hstack((X, X_biling))
+
+#sc = StandardScaler()
+#X_std = sc.fit_transform(X)
+
+#sc_biling = StandardScaler()
+#X_biling_std = sc_biling = sc_biling.fit_transform(X_biling)
+
+sc_combined = StandardScaler()
+X_combined_std = sc_combined.fit_transform(X_combined)
 
 #pca = PCA(n_components=2)
-pca = KernelPCA(n_components=3, kernel='rbf')
+pca = KernelPCA(kernel='rbf')
 #pca = SparsePCA()
 #pca = TruncatedSVD()
 #pca = IncrementalPCA()
-X_pca = pca.fit_transform(X_std)
+
+#X_pca = pca.fit_transform(X_std)
+#X_biling_pca = pca.fit_transform(X_biling_std)
+X_combined_pca = pca.fit_transform(X_combined_std)
 
 
-kmeans = KMeans(n_clusters=2, init='random').fit(X_pca)
-f = kmeans.predict(X_pca)
+#kmeans = KMeans(n_clusters=2, init='random').fit(X_pca)
+#f = kmeans.predict(X_pca)
+
+#kmeans = KMeans(n_clusters=2, init='random').fit(X_biling_pca)
+#f = kmeans.predict(X_biling_pca)
+
+kmeans = KMeans(n_clusters=2, init='random').fit(X_combined_pca)
+f = kmeans.predict(X_combined_pca)
 
 print(f)
 print('contains number one x times: ', list(f).count(1))
@@ -112,4 +185,6 @@ def plot(f):
         plt.show()
 
 
-plot(X_pca)
+#plot(X_pca)
+#plot(X_biling_pca)
+plot(X_combined_pca)
