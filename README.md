@@ -20,7 +20,7 @@ The evaluation will be a combination of manual evaluation and comparison to word
 ## Task Adjustment
 
 After some problems with the initial project, the project was reduced to a more rudimentary form.
-The adjusted task was now to seperate two concepts via normal clustering, where each concept is realized as a list 
+The adjusted task was now to seperate two concepts via normal clustering (instead of soft clustering) e.g. K-Means, where each concept is realized as a list 
 of words which are very similar to each other (list of cloth names vs. list of body parts).
 As features a bag of words approach was used.
 The monolingual and bilingual features were still both tested.
