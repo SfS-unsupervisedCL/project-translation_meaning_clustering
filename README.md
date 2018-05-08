@@ -51,8 +51,11 @@ more or less good seperation to total random combinations of clusters.
 The relevant file to run is the "BOWApproach.py" file. 
 The path needs to be adjusted in the call of the "readFile" method and in the call of the "readAlignedCorpus" method.
 Each of the paths is expected to point to a file (not to a directory containing files).
-The data I used can be found here:
+The data I used can be found here (it is a small subset of the OpenSubtitles corpus):
 
+
+In order to test other concepts, the lists of strings in above mentioned methods needs to be replaced with the target lists.
+Take care that the lists are the same for both methods.
 
 
 ## Relevant literature 
