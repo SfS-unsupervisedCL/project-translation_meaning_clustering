@@ -56,6 +56,7 @@ The data I used can be found here (it is a small subset of the OpenSubtitles cor
 
 In order to test other concepts, the lists of strings in above mentioned methods needs to be replaced with the target lists.
 Take care that the lists are the same for both methods.
+The result is printed to the console as well as shown as a plot.
 
 
 ## Relevant literature 
