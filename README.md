@@ -28,15 +28,31 @@ For the monolingual features a BOW with a window of 5 tokens was used.
 For the bilingual features a BOW with the whole aligned sentence was used (due to missing word alignment).
 Although I claim that the difference between a 5 window BOW and a total sentence BOW is not significant due to the corpus which was used. The corpus was the "OpenSubtitles" corpus. Since it contains transcriptions from movies and series the sentences in there are rather short (at least shorter than in corpus of written text).
 
+## Results
 
-## So far
+Surprinsingly the bilingual features performed almost as good as the monolingual features on their own.
+Although the small subset of the corpus for the bilingual features was only about 100mb while part for the monolingual features was about 2gb.
+A combination of both did not yield significantly better results.
 
-Monolingual features, normal clustering:
-</br>
-Corpora:</br>
-  COCA, COHA, GloWbe: performed really poorly. Translations like {good, nice} and {issue, problem, ..} are clustered randomly
-  </br>
-  EUROPARL: performed a bit better. Translations like {good, nice} and {issue, problem, ..} are clustered correctly into two clusters. But more complex translations which contain less frequent words are still a problem.
+The best two concepts, which were perfectly clustered into two groups were a list of fruits and a list of words related to living space:
+
+Fruits:
+'apple', 'banana', 'oranges', 'watermelons', 'strawberries', 'grape', 'peach', 'cherry', 'pear', 'plum', 'melon', 'lemon', 'coconut', 'lime',
+
+Home space:
+'office', 'home', 'building', 'house', 'apartment', 'city', 'town', 'village',
+
+Other concepts were clothing, transportation, cities, furniture, relatives, body parts. 
+But none of them was seperated perfectly via clustering, the results ranged from 
+more or less good seperation to total random combinations of clusters.
+
+
+## How to run:
+The relevant file to run is the "BOWApproach.py" file. 
+The path needs to be adjusted in the call of the "readFile" method and in the call of the "readAlignedCorpus" method.
+Each of the paths is expected to point to a file (not to a directory containing files).
+The data I used can be found here:
+
 
 
 ## Relevant literature 
