@@ -52,6 +52,7 @@ The relevant file to run is the "BOWApproach.py" file.
 The path needs to be adjusted in the call of the "readFile" method and in the call of the "readAlignedCorpus" method.
 Each of the paths is expected to point to a file (not to a directory containing files).
 The data I used can be found here (it is a small subset of the OpenSubtitles corpus):
+https://drive.google.com/open?id=14udNeygNpYXzsA0lLnOOoI4FbM6pmyhO
 
 
 In order to test other concepts, the lists of strings in above mentioned methods needs to be replaced with the target lists.
