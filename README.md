@@ -17,6 +17,18 @@ Bilingual features: PMI of a word and its translations
 </br>
 The evaluation will be a combination of manual evaluation and comparison to wordnet sense clusters.
 
+## Task Adjustment
+
+After some problems with the initial project, the project was reduced to a more rudimentary form.
+The adjusted task was now to seperate two concepts via normal clustering, where each concept is realized as a list 
+of words which are very similar to each other (list of cloth names vs. list of body parts).
+As features a bag of words approach was used.
+The monolingual and bilingual features were still both tested.
+For the monolingual features a BOW with a window of 5 tokens was used.
+For the bilingual features a BOW with the whole aligned sentence was used (due to missing word alignment).
+Although I claim that the difference between a 5 window BOW and a total sentence BOW is not significant due to the corpus which was used. The corpus was the "OpenSubtitles" corpus. Since it contains transcriptions from movies and series the sentences in there are rather short (at least shorter than in corpus of written text).
+
+
 ## So far
 
 Monolingual features, normal clustering:
